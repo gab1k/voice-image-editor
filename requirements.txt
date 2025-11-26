@@ -1,0 +1,6 @@
+torch==2.1.2
+transformers==4.36.2
+diffusers==0.25.0
+accelerate==0.25.0
+pandas==2.2.3
+scikit-learn==1.7.2
