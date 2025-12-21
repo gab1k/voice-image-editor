@@ -2,6 +2,10 @@ from pathlib import Path
 from typing import Optional, Union
 import sys
 import torch
+import tempfile
+import os
+import librosa
+import soundfile as sf
 
 
 class ASRModelWrapper:
@@ -99,17 +103,37 @@ class ASRModelWrapper:
 
         print("Parakeet-TDT-0.6B-v3 loaded")
 
+    def _convert_ogg_to_wav(self, audio_input: str) -> str:
+        audio, sr = librosa.load(audio_input, sr=None)
+        
+        temp_wav = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        temp_wav_path = temp_wav.name
+        temp_wav.close()
+        
+        sf.write(temp_wav_path, audio, sr)
+        
+        return temp_wav_path
+
     def transcribe(self, audio_input: Union[str, Path]) -> str:
         audio_input = str(audio_input)
+        
+        temp_file = None
+        try:
+            if audio_input.lower().endswith(('.ogg', '.oga')):
+                audio_input = self._convert_ogg_to_wav(audio_input)
+                temp_file = audio_input
 
-        if self.model_type == "gigaam_v3":
-            return self._transcribe_gigaam(audio_input)
-        elif self.model_type == "tone":
-            return self._transcribe_tone(audio_input)
-        elif self.model_type == "parakeet":
-            return self._transcribe_parakeet(audio_input)
+            if self.model_type == "gigaam_v3":
+                return self._transcribe_gigaam(audio_input)
+            elif self.model_type == "tone":
+                return self._transcribe_tone(audio_input)
+            elif self.model_type == "parakeet":
+                return self._transcribe_parakeet(audio_input)
 
-        raise RuntimeError("Unsupported ASR model")
+            raise RuntimeError("Unsupported ASR model")
+        finally:
+            if temp_file and os.path.exists(temp_file):
+                os.unlink(temp_file)
 
     def _transcribe_gigaam(self, audio_input: str) -> str:
         try:
@@ -158,6 +182,6 @@ class ASRModelWrapper:
 
 
 if __name__ == "__main__":
-    asr = ASRModelWrapper(model_type="tone", device="cuda")
-    print(asr.transcribe("sample.wav"))
+    asr = ASRModelWrapper(model_type="gigaam_v3", device="cuda")
+    print(asr.transcribe("sample.ogg"))
     asr.close()
