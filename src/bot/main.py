@@ -12,8 +12,8 @@ from telegram.ext import (
 )
 from PIL import Image
 import io
-from models.image_editor import DiffusionImageEditor
-from models.asr_model import ASRModelWrapper
+from src.models.image_editor import DiffusionImageEditor
+from src.models.asr_model import ASRModelWrapper
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -165,7 +165,7 @@ async def unexpected_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 def main() -> None:
 
-    TELEGRAM_BOT_TOKEN ='8528480581:AAGTlsc7lLagAdFs61sX7rQ2XwFglJAmr_I'  
+    TELEGRAM_BOT_TOKEN ='***'
     
     token = TELEGRAM_BOT_TOKEN
     application = Application.builder().token(token).build()
