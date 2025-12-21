@@ -7,7 +7,14 @@ transformers>=4.35.0
 accelerate>=0.25.0
 datasets[audio]<3
 matplotlib
-Pillow
 lpips 
 scikit-image 
 tqdm
+telegram
+python-telegram-bot>=20.0
+nest_asyncio
+Pillow>=9.0
+pyctcdecode
+onnxruntime
+kenlm
+miniaudio

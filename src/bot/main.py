@@ -12,12 +12,26 @@ from telegram.ext import (
 )
 from PIL import Image
 import io
+from models.image_editor import DiffusionImageEditor
+from models.asr_model import ASRModelWrapper
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+editor = DiffusionImageEditor(
+    model_type="instruct_pix2pix",
+    model_name="timbrooks/instruct-pix2pix",
+    device="cuda",
+    num_inference_steps=20,
+    strength=0.75,
+    image_guidance_scale=1.5,
+    guidance_scale=7.5,
+    max_side=1024,
+)
+asr = ASRModelWrapper(model_type="tone", device="cuda")
 
 WAITING_IMAGE = 0
 WAITING_AUDIO = 1
@@ -30,7 +44,13 @@ def process_image_with_audio(image_path: str, audio_path: str) -> str:
         output_path = image_path.rsplit(".", 1)[0] + "_edited." + image_path.rsplit(".", 1)[1]
     
     with Image.open(image_path) as img:
-        img.save(output_path)
+        print("Старт распознавания из пути: ", audio_path)
+        audio_text = asr.transcribe(audio_path)
+        print(audio_text)
+        print("Старт редактирования")
+        result_img = editor.edit(image=img, instruction=audio_text)
+        print("Конец редактирования")
+        result_img.save(output_path)
     
     return output_path
 
@@ -145,7 +165,7 @@ async def unexpected_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 def main() -> None:
 
-    TELEGRAM_BOT_TOKEN ='***'  
+    TELEGRAM_BOT_TOKEN ='8528480581:AAGTlsc7lLagAdFs61sX7rQ2XwFglJAmr_I'  
     
     token = TELEGRAM_BOT_TOKEN
     application = Application.builder().token(token).build()
