@@ -39,7 +39,7 @@ Voice → ASR model → Text → Image-Editing model → Image → User
    - Распознавание речи
    - Преобразование голосовых команд в текст
 
-3. **Image Editing:** `тут моделька`
+3. **Image Editing:** `timbrooks/instruct-pix2pix`
    - Редактирование изображений по текстовым инструкциям
      
 4. **Evaluator:** `openai/gpt-4o`, `gemini-2.5-flash`
