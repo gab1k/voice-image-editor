@@ -57,7 +57,7 @@ def process_image_with_audio(image_path: str, audio_path: str) -> str:
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
-        "Привет! Я бот для редактирования изображений по голосовым инструкциям.\n\n Отправь мне картинку, которую хочешь отредактировать."
+        "Привет! Я бот для редактирования изображений по голосовым инструкциям.\n\nОтправь мне картинку, которую хочешь отредактировать."
     )
     return WAITING_IMAGE
 
@@ -77,7 +77,7 @@ async def receive_image(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     context.user_data["image_path"] = image_path
     
     await update.message.reply_text(
-        "Картинка получена!\n\n Теперь отправь голосовое сообщение или аудиофайл с инструкциями, что нужно изменить на картинке."
+        "Картинка получена!\n\nТеперь отправь голосовое сообщение или аудиофайл с инструкциями, что нужно изменить на картинке."
     )
     return WAITING_AUDIO
 
