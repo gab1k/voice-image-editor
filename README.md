@@ -31,15 +31,18 @@
 Voice → ASR model → Text → Image-Editing model → Image → User
 
 ### Используемые модели
-
-1. **Speech-to-Text:** `ai-sage/GigaAM-v3`
+0. **Сбор датасета** - `Helsinki-NLP/opus-mt-en-ru`, `snakers4/silero-models, silero_tts`
+   - Перевод текстовых инструкций
+   - Синтетическая озвучка текстовых инструкций
+ 
+2. **Speech-to-Text:** `ai-sage/GigaAM-v3`
    - Распознавание речи
    - Преобразование голосовых команд в текст
 
-2. **Image Editing:** `тут моделька`
+3. **Image Editing:** `тут моделька`
    - Редактирование изображений по текстовым инструкциям
      
-3. **Evaluator:** `openai/gpt-4o`, `gemini-2.5-flash`
+4. **Evaluator:** `openai/gpt-4o`, `gemini-2.5-flash`
    - Оценка качества генерации
   
 ### Метрики
